@@ -1,0 +1,16 @@
+[
+{
+  "modid": "natureforce",
+  "name": "Nature Force",
+  "description": "A mod that gets it's power from the nature.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Imdutch21"],
+  "credits": "The Forge and FML guys, for making this example",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
