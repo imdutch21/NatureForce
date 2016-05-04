@@ -1,6 +1,8 @@
 package natureforce.proxy;
 
+import natureforce.client.render.RenderDeathPlant;
 import natureforce.lib.References;
+import natureforce.tileentities.TileEntityDeathPlant;
 import natureforce.util.JsonRenderGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -8,12 +10,21 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ClientProxy extends CommonProxy {
-    private static final boolean createJSONFile = true;
+    private static final boolean createJSONFile = false;
+
+
+    @Override
+    public void preInit() {
+        super.preInit();
+
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDeathPlant.class, new RenderDeathPlant());
+    }
 
     @Override
     public void registerDefaultBlockItemRenderer(Block block) {

@@ -1,11 +1,10 @@
 package natureforce.registries;
 
 import natureforce.NatureForce;
-import natureforce.blocks.BlockTreeGenerator;
-import natureforce.creativetab.NFCreativeTab;
+import natureforce.blocks.BlockDeathPlant;
+import natureforce.blocks.BlockPlantGenerator;
 import natureforce.creativetab.NFCreativeTabs;
 import net.minecraft.block.Block;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -18,7 +17,8 @@ import java.util.List;
 
 public class NFBlockRegistry {
     public final List<Block> BLOCKS = new ArrayList<Block>();
-    public final Block treeGenerator = new BlockTreeGenerator();
+    public final Block treeGenerator = new BlockPlantGenerator();
+    public final Block deathPlant = new BlockDeathPlant();
 
     public void preInit(){
         try {
