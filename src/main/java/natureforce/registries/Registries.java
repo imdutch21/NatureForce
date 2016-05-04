@@ -18,6 +18,7 @@ public class Registries {
 
     public void init() {
         blockRegistry.init();
+        itemRegistry.init();
         recipeRegistry.init();
     }
 }

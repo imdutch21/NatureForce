@@ -32,16 +32,13 @@ public class RenderDeathPlant extends TileEntitySpecialRenderer<TileEntityDeathP
 
                 if (iblockstate.getRenderType() != EnumBlockRenderType.INVISIBLE) {
                     this.bindTexture(TextureMap.locationBlocksTexture);
-                    float red = 82 / 255;
-                    float green = 21 / 255;
-                    float blue = 21 / 255;
 
                     GlStateManager.pushMatrix();
                     GlStateManager.disableLighting();
-                    GL11.glPushMatrix();
+                    GlStateManager.blendFunc(GL11.GL_CONSTANT_ALPHA, GL11.GL_ONE_MINUS_CONSTANT_ALPHA);
                     GL11.glEnable(GL11.GL_BLEND);
-                    GL14.glBlendColor(red, green, blue, 1f);
-                    GL11.glBlendFunc(GL11.GL_CONSTANT_ALPHA, GL11.GL_ONE_MINUS_CONSTANT_ALPHA);
+                    GL14.glBlendColor(0f, 0f, 0f, 1f);
+
                     Tessellator tessellator = Tessellator.getInstance();
                     VertexBuffer vertexbuffer = tessellator.getBuffer();
                     vertexbuffer.begin(7, DefaultVertexFormats.BLOCK);
@@ -50,20 +47,12 @@ public class RenderDeathPlant extends TileEntitySpecialRenderer<TileEntityDeathP
                     BlockRendererDispatcher blockrendererdispatcher = Minecraft.getMinecraft().getBlockRendererDispatcher();
                     blockrendererdispatcher.getBlockModelRenderer().renderModel(world, blockrendererdispatcher.getModelForState(iblockstate), iblockstate, blockpos, vertexbuffer, false, MathHelper.getPositionRandom(te.getPos()));
                     tessellator.draw();
-                    GL11.glBlendFunc(GL11.GL_CONSTANT_ALPHA, GL11.GL_ONE_MINUS_CONSTANT_ALPHA);
-                    GL14.glBlendColor(1f, 1f, 1f, 1f);
+                    GlStateManager.blendFunc(GL11.GL_CONSTANT_ALPHA, GL11.GL_ONE_MINUS_CONSTANT_ALPHA);
                     GL11.glDisable(GL11.GL_BLEND);
-                    GL11.glPopMatrix();
                     GlStateManager.enableLighting();
                     GlStateManager.popMatrix();
                 }
             }
         }
-    }
-
-
-
-    public void renderBlockInWorld(){
-
     }
 }

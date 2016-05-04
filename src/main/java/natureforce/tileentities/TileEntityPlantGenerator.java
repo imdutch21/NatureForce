@@ -41,6 +41,7 @@ public class TileEntityPlantGenerator extends TileEntityGenerator {
                     if (progress >= recipe.ticks) {
                         if (receiveUnits(recipe.unitsPerDecayPercentage, true) == recipe.unitsPerDecayPercentage) {
                             receiveUnits(recipe.unitsPerDecayPercentage, false);
+                            progress = 0;
                             worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3);
                             ((TileEntityDeathPlant) tile).decayPercentage++;
                             worldObj.notifyBlockUpdate(currentSelectedBlock, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3);

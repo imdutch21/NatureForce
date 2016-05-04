@@ -32,6 +32,22 @@ public class BlockDeathPlant extends Block implements ITileEntityProvider {
     }
 
     @Override
+    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+        super.onBlockAdded(worldIn, pos, state);
+        TileEntity tile = worldIn.getTileEntity(pos);
+        if (tile instanceof TileEntityDeathPlant)
+            block = ((TileEntityDeathPlant) tile).getBlock();
+    }
+
+    @Override
+    public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {
+        super.onNeighborBlockChange(worldIn, pos, state, neighborBlock);
+        TileEntity tile = worldIn.getTileEntity(pos);
+        if (tile instanceof TileEntityDeathPlant)
+            block = ((TileEntityDeathPlant) tile).getBlock();
+    }
+
+    @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.INVISIBLE;
     }

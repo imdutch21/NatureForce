@@ -3,6 +3,7 @@ package natureforce.registries;
 import natureforce.NatureForce;
 import natureforce.blocks.BlockDeathPlant;
 import natureforce.blocks.BlockPlantGenerator;
+import natureforce.blocks.BlockUnitRelay;
 import natureforce.creativetab.NFCreativeTabs;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
@@ -19,6 +20,7 @@ public class NFBlockRegistry {
     public final List<Block> BLOCKS = new ArrayList<Block>();
     public final Block treeGenerator = new BlockPlantGenerator();
     public final Block deathPlant = new BlockDeathPlant();
+    public final Block unitRelay = new BlockUnitRelay();
 
     public void preInit(){
         try {
