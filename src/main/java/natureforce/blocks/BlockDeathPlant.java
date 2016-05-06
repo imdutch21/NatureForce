@@ -28,7 +28,8 @@ public class BlockDeathPlant extends Block implements ITileEntityProvider {
 
     public BlockDeathPlant() {
         super(Material.plants, MapColor.brownColor);
-        setUnlocalizedName(References.NAME_PREFIX + "deathPlant");
+        setRegistryName("deathPlant");
+        setUnlocalizedName(getRegistryName().toString());
     }
 
     @Override

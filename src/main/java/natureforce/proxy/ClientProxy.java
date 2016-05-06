@@ -1,8 +1,10 @@
 package natureforce.proxy;
 
 import natureforce.client.render.RenderDeathPlant;
+import natureforce.client.render.RenderRelay;
 import natureforce.lib.References;
 import natureforce.tileentities.TileEntityDeathPlant;
+import natureforce.tileentities.TileEntityRelay;
 import natureforce.util.JsonRenderGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -16,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClientProxy extends CommonProxy {
-    private static final boolean createJSONFile = false;
+    private static final boolean createJSONFile = true;
 
 
     @Override
@@ -24,12 +26,12 @@ public class ClientProxy extends CommonProxy {
         super.preInit();
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDeathPlant.class, new RenderDeathPlant());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRelay.class, new RenderRelay());
     }
 
     @Override
     public void registerDefaultBlockItemRenderer(Block block) {
-        String name = block.getUnlocalizedName();
-        String blockName = name.substring(name.lastIndexOf(".") + 1, name.length());
+        String blockName = block.getRegistryName().toString().replace(References.ASSETS_PREFIX, "");
         if (createJSONFile)
             JsonRenderGenerator.createJSONForBlock(block, blockName);
         ModelLoader.registerItemVariants(Item.getItemFromBlock(block), new ModelResourceLocation(References.ASSETS_PREFIX + blockName, "inventory"));
@@ -42,16 +44,14 @@ public class ClientProxy extends CommonProxy {
         item.getSubItems(item, null, list);
         if (list.size() > 0) {
             for (ItemStack itemStack : list) {
-                String name = item.getUnlocalizedName(itemStack);
-                String itemName = name.substring(name.lastIndexOf(".") + 1, name.length());
+                String itemName = item.getRegistryName().toString().replace(References.ASSETS_PREFIX, "");
                 if (createJSONFile)
                     JsonRenderGenerator.createJSONForItem(item, itemStack.getItemDamage(), itemName);
                 Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, itemStack.getItemDamage(), new ModelResourceLocation(References.ASSETS_PREFIX + itemName, "inventory"));
                 ModelLoader.setCustomModelResourceLocation(item, itemStack.getItemDamage(), new ModelResourceLocation(References.ASSETS_PREFIX + itemName, "inventory"));
             }
         } else {
-            String name = item.getUnlocalizedName();
-            String itemName = name.substring(name.lastIndexOf(".") + 1, name.length());
+            String itemName = item.getRegistryName().toString().replace(References.ASSETS_PREFIX, "");
             if (createJSONFile)
                 JsonRenderGenerator.createJSONForItem(item, 0, itemName);
             Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0, new ModelResourceLocation(References.ASSETS_PREFIX + itemName, "inventory"));

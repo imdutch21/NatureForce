@@ -2,6 +2,9 @@ package natureforce.tileentities;
 
 import natureforce.api.natureunits.IEnergyBeamConnection;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
@@ -16,7 +19,7 @@ public class TileEntityRelay extends TileEntity implements ITickable, IEnergyBea
 
     @Override
     public float connectionPointX() {
-        return .70f;
+        return .5f;
     }
 
     @Override
@@ -26,7 +29,7 @@ public class TileEntityRelay extends TileEntity implements ITickable, IEnergyBea
 
     @Override
     public float connectionPointZ() {
-        return .70f;
+        return .5f;
     }
 
 
@@ -35,8 +38,8 @@ public class TileEntityRelay extends TileEntity implements ITickable, IEnergyBea
         super.writeToNBT(compound);
         if (connectedTo != null) {
             compound.setInteger("posX", connectedTo.getX());
-            compound.setInteger("posY", connectedTo.getX());
-            compound.setInteger("posZ", connectedTo.getX());
+            compound.setInteger("posY", connectedTo.getY());
+            compound.setInteger("posZ", connectedTo.getZ());
         }
     }
 
@@ -46,6 +49,20 @@ public class TileEntityRelay extends TileEntity implements ITickable, IEnergyBea
         if (compound.hasKey("posX")){
             connectedTo = new BlockPos(compound.getInteger("posX"), compound.getInteger("posY"), compound.getInteger("posZ"));
         }
+    }
+
+
+    @Override
+    public Packet<?> getDescriptionPacket() {
+        NBTTagCompound tagCompound = new NBTTagCompound();
+        writeToNBT(tagCompound);
+        return new SPacketUpdateTileEntity(getPos(), 0, tagCompound);
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+        NBTTagCompound tagCompound = pkt.getNbtCompound();
+        readFromNBT(tagCompound);
     }
 
     @Override

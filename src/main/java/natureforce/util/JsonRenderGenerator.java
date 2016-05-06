@@ -141,7 +141,6 @@ public class JsonRenderGenerator {
 
     public static void createJSONForBlock(Block block, String blockName) {
         (new File(assetsFolder, "models")).mkdir();
-        System.out.println(blockName);
         createBlockStateJSON(block, blockName);
         createBlockModelJSON(block, blockName);
         createBlockItemJSON(block, blockName);

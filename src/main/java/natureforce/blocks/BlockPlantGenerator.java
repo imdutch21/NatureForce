@@ -20,7 +20,8 @@ import net.minecraft.world.World;
 public class BlockPlantGenerator extends Block implements ITileEntityProvider {
     public BlockPlantGenerator() {
         super(Material.rock, MapColor.greenColor);
-        setUnlocalizedName(References.NAME_PREFIX + "treeGenerator");
+        setRegistryName("plantGenerator");
+        setUnlocalizedName(getRegistryName().toString());
     }
 
     @Override

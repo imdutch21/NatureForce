@@ -35,9 +35,7 @@ public class NFItemRegistry {
 
 
     private void registerItem(Item item) {
-        String name = item.getUnlocalizedName();
-        String itemName = name.substring(name.lastIndexOf(".") + 1, name.length());
-        GameRegistry.register(item.setRegistryName(itemName));
+        GameRegistry.register(item);
         ITEMS.add(item);
     }
 }

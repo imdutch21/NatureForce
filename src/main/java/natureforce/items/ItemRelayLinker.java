@@ -1,5 +1,6 @@
 package natureforce.items;
 
+import natureforce.api.natureunits.IEnergyBeamConnection;
 import natureforce.blocks.BlockUnitRelay;
 import natureforce.creativetab.NFCreativeTabs;
 import natureforce.lib.References;
@@ -20,28 +21,39 @@ public class ItemRelayLinker extends Item {
 
     public ItemRelayLinker() {
         setCreativeTab(NFCreativeTabs.tabMain);
-        setUnlocalizedName(References.NAME_PREFIX + "relayLinker");
+        setRegistryName("relayLinker");
+        setUnlocalizedName(getRegistryName().toString());
     }
 
 
     @Override
     public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (worldIn.isRemote && worldIn.getBlockState(pos) != null && worldIn.getBlockState(pos).getBlock() instanceof BlockUnitRelay) {
+        if (worldIn.isRemote )
+            return EnumActionResult.FAIL;
+        if (worldIn.getBlockState(pos) != null && worldIn.getBlockState(pos).getBlock() instanceof BlockUnitRelay) {
             NBTTagCompound tagCompound = stack.getTagCompound();
-            if (tagCompound.hasKey("posX")) {
+            if (tagCompound != null && tagCompound.hasKey("posX")) {
                 TileEntity tileEntity = worldIn.getTileEntity(pos);
-                if (tileEntity instanceof TileEntityRelay) {
-                    ((TileEntityRelay) tileEntity).connectedTo = new BlockPos(tagCompound.getInteger("posX"), tagCompound.getInteger("posY"), tagCompound.getInteger("posZ"));
-                    stack.setTagCompound(new NBTTagCompound());
-                    playerIn.addChatMessage(new TextComponentString("relays linked"));
-                    return EnumActionResult.SUCCESS;
+                if (tileEntity instanceof IEnergyBeamConnection) {
+                    if (((IEnergyBeamConnection) tileEntity).canBeamConnect()) {
+                        ((TileEntityRelay) tileEntity).connectedTo = new BlockPos(tagCompound.getInteger("posX"), tagCompound.getInteger("posY"), tagCompound.getInteger("posZ"));
+                        worldIn.notifyBlockUpdate(pos, worldIn.getBlockState(pos), worldIn.getBlockState(pos), 3);
+                        stack.setTagCompound(new NBTTagCompound());
+                        playerIn.addChatMessage(new TextComponentString("relays linked"));
+                        return EnumActionResult.SUCCESS;
+                    }
                 }
             } else {
-                tagCompound.setInteger("posX", pos.getX());
-                tagCompound.setInteger("posY", pos.getY());
-                tagCompound.setInteger("posZ", pos.getZ());
-                stack.setTagCompound(tagCompound);
-                return EnumActionResult.SUCCESS;
+                TileEntity tileEntity = worldIn.getTileEntity(pos);
+                if (tileEntity instanceof TileEntityRelay) {
+                    if (tagCompound == null)
+                        tagCompound = new NBTTagCompound();
+                    tagCompound.setInteger("posX", pos.getX());
+                    tagCompound.setInteger("posY", pos.getY());
+                    tagCompound.setInteger("posZ", pos.getZ());
+                    stack.setTagCompound(tagCompound);
+                    return EnumActionResult.SUCCESS;
+                }
             }
         }
 

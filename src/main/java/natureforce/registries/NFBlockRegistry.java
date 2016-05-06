@@ -46,11 +46,9 @@ public class NFBlockRegistry {
     }
 
     private void registerBlock(Block block) {
-        String name = block.getUnlocalizedName();
-        String blockName = name.substring(name.lastIndexOf(".") + 1, name.length());
-        GameRegistry.register(block.setRegistryName(blockName));
+        GameRegistry.register(block);
         ItemBlock itemBlock = new ItemBlock(block);
-        GameRegistry.register(itemBlock.setRegistryName(blockName));
+        GameRegistry.register(itemBlock.setRegistryName(block.getRegistryName()));
         this.BLOCKS.add(block);
     }
 }
