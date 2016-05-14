@@ -19,7 +19,7 @@ import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
 public class RenderRelay extends TileEntitySpecialRenderer<TileEntityRelay> {
-    private static final ResourceLocation beamTexture = new ResourceLocation(References.MOD_ID, "textures/entities/unitBeam.png");
+    private static final ResourceLocation beamTexture = new ResourceLocation(References.ASSETS_PREFIX + "textures/entity/unitBeam.png");
 
     @Override
     public void renderTileEntityAt(TileEntityRelay te, double x, double y, double z, float partialTicks, int destroyStage) {
@@ -38,27 +38,29 @@ public class RenderRelay extends TileEntitySpecialRenderer<TileEntityRelay> {
                 float rotYaw = -((float) (Math.atan2(dz, dx) * 180.0D / Math.PI));
                 float rotPitch = ((float) (Math.atan2(dy, subDistance) * 180.0D / Math.PI));
 
-                GlStateManager.pushMatrix();
+
                 Tessellator tessellator = Tessellator.getInstance();
                 VertexBuffer vertexBuffer = tessellator.getBuffer();
                 this.bindTexture(beamTexture);
-                GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, 10497.0F);
-                GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, 10497.0F);
+                GlStateManager.glTexParameteri(3553, 10242, 10497);
+                GlStateManager.glTexParameteri(3553, 10243, 10497);
                 GlStateManager.disableLighting();
                 GlStateManager.disableCull();
+                GlStateManager.enableTexture2D();
                 GlStateManager.enableBlend();
-                GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-
+                GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+                GlStateManager.pushMatrix();
                 GlStateManager.translate(x + te.connectionPointX(), y + te.connectionPointY(), z + te.connectionPointZ());
 
                 GlStateManager.rotate(rotYaw, 0, 1, 0);
                 GlStateManager.rotate(rotPitch, 0, 0, 1);
 
-                double d1 = 0.05D;
-                double d2 = (te.getWorld().getTotalWorldTime() + partialTicks) / 5f;
-                double d3 = distance + d2;
+                double d1 = 0.08D;
+                double d2 = -1.0D + MathHelper.frac((partialTicks + te.getWorld().getTotalWorldTime()) * 0.2D - (double)MathHelper.floor_double((partialTicks+ te.getWorld().getTotalWorldTime()) * 0.1D));
+                double d3 = distance * 0.5D + d2;
+
                 vertexBuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-                vertexBuffer.pos(distance, -d1, -d1).tex(0.0D, d3).endVertex();
+                vertexBuffer.pos(distance, -d1, -d1).tex(1.0D, d3).endVertex();
                 vertexBuffer.pos(0, -d1, -d1).tex(1.0D, d2).endVertex();
                 vertexBuffer.pos(0, d1, -d1).tex(0.0D, d2).endVertex();
                 vertexBuffer.pos(distance, d1, -d1).tex(0.0D, d3).endVertex();
@@ -76,11 +78,12 @@ public class RenderRelay extends TileEntitySpecialRenderer<TileEntityRelay> {
                 vertexBuffer.pos(distance, -d1, -d1).tex(0.0D, d3).endVertex();
 
                 tessellator.draw();
-                GlStateManager.enableLighting();
                 GlStateManager.popMatrix();
+                GlStateManager.enableLighting();
+                GlStateManager.enableCull();
+                GlStateManager.disableBlend();
 
             }
-
         }
     }
 }
