@@ -38,10 +38,11 @@ public class RenderRelay extends TileEntitySpecialRenderer<TileEntityRelay> {
                 float rotYaw = -((float) (Math.atan2(dz, dx) * 180.0D / Math.PI));
                 float rotPitch = ((float) (Math.atan2(dy, subDistance) * 180.0D / Math.PI));
 
-
+                GlStateManager.enableTexture2D();
                 Tessellator tessellator = Tessellator.getInstance();
                 VertexBuffer vertexBuffer = tessellator.getBuffer();
                 this.bindTexture(beamTexture);
+
                 GlStateManager.glTexParameteri(3553, 10242, 10497);
                 GlStateManager.glTexParameteri(3553, 10243, 10497);
                 GlStateManager.disableLighting();
@@ -49,7 +50,6 @@ public class RenderRelay extends TileEntitySpecialRenderer<TileEntityRelay> {
                 GlStateManager.enableTexture2D();
                 GlStateManager.enableBlend();
                 GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-                GlStateManager.pushMatrix();
                 GlStateManager.translate(x + te.connectionPointX(), y + te.connectionPointY(), z + te.connectionPointZ());
 
                 GlStateManager.rotate(rotYaw, 0, 1, 0);
@@ -78,10 +78,10 @@ public class RenderRelay extends TileEntitySpecialRenderer<TileEntityRelay> {
                 vertexBuffer.pos(distance, -d1, -d1).tex(0.0D, d3).endVertex();
 
                 tessellator.draw();
-                GlStateManager.popMatrix();
                 GlStateManager.enableLighting();
                 GlStateManager.enableCull();
                 GlStateManager.disableBlend();
+                GlStateManager.popMatrix();
 
             }
         }
