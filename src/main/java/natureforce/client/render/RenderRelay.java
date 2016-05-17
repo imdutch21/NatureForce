@@ -38,7 +38,7 @@ public class RenderRelay extends TileEntitySpecialRenderer<TileEntityRelay> {
                 float rotYaw = -((float) (Math.atan2(dz, dx) * 180.0D / Math.PI));
                 float rotPitch = ((float) (Math.atan2(dy, subDistance) * 180.0D / Math.PI));
 
-                GlStateManager.enableTexture2D();
+                GlStateManager.pushMatrix();
                 Tessellator tessellator = Tessellator.getInstance();
                 VertexBuffer vertexBuffer = tessellator.getBuffer();
                 this.bindTexture(beamTexture);
