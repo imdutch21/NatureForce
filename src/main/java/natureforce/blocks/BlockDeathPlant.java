@@ -56,10 +56,12 @@ public class BlockDeathPlant extends Block implements ITileEntityProvider {
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        if (block != null)
-            return block.getBlock().getBoundingBox(block, source, pos);
-        else
-            return FULL_BLOCK_AABB;
+        if (source.getTileEntity(pos) instanceof TileEntityDeathPlant) {
+            IBlockState block = ((TileEntityDeathPlant) source.getTileEntity(pos)).getBlock();
+            if (block != null)
+                return block.getBlock().getBoundingBox(block, source, pos);
+        }
+        return FULL_BLOCK_AABB;
     }
 
     @Override
@@ -87,10 +89,12 @@ public class BlockDeathPlant extends Block implements ITileEntityProvider {
 
     @Override
     public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World world, BlockPos pos) {
-        if (block != null)
-            return block.getBlock().getCollisionBoundingBox(block, world, pos);
-        else
-            return super.getCollisionBoundingBox(state, world, pos);
+        if (world.getTileEntity(pos) instanceof TileEntityDeathPlant) {
+            IBlockState block = ((TileEntityDeathPlant) world.getTileEntity(pos)).getBlock();
+            if (block != null)
+                return block.getBlock().getCollisionBoundingBox(block, world, pos);
+        }
+        return super.getCollisionBoundingBox(state, world, pos);
     }
 
     @Override

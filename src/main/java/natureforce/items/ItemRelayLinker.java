@@ -3,8 +3,8 @@ package natureforce.items;
 import natureforce.api.natureunits.IEnergyBeamConnection;
 import natureforce.blocks.BlockUnitRelay;
 import natureforce.creativetab.NFCreativeTabs;
-import natureforce.lib.References;
 import natureforce.tileentities.TileEntityRelay;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -30,18 +30,30 @@ public class ItemRelayLinker extends Item {
     public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (worldIn.isRemote )
             return EnumActionResult.FAIL;
-        if (worldIn.getBlockState(pos) != null && worldIn.getBlockState(pos).getBlock() instanceof BlockUnitRelay) {
+        if (worldIn.getBlockState(pos) != null) {
             NBTTagCompound tagCompound = stack.getTagCompound();
             if (tagCompound != null && tagCompound.hasKey("posX")) {
                 TileEntity tileEntity = worldIn.getTileEntity(pos);
                 if (tileEntity instanceof IEnergyBeamConnection) {
-                    if (((IEnergyBeamConnection) tileEntity).canBeamConnect()) {
-                        ((TileEntityRelay) tileEntity).connectedTo = new BlockPos(tagCompound.getInteger("posX"), tagCompound.getInteger("posY"), tagCompound.getInteger("posZ"));
+                    BlockPos connection = new BlockPos(tagCompound.getInteger("posX"), tagCompound.getInteger("posY"), tagCompound.getInteger("posZ"));
+                    TileEntity tileEntity2 = worldIn.getTileEntity(connection);
+                    if (connection != pos && tileEntity2 instanceof IEnergyBeamConnection && ((IEnergyBeamConnection) tileEntity).canBeamConnect()) {
+                        ((TileEntityRelay) tileEntity).getPowerFrom = connection;
                         worldIn.notifyBlockUpdate(pos, worldIn.getBlockState(pos), worldIn.getBlockState(pos), 3);
+                        ((TileEntityRelay) tileEntity2).sendPowerTo = pos;
+                        worldIn.notifyBlockUpdate(connection, worldIn.getBlockState(connection), worldIn.getBlockState(connection), 3);
                         stack.setTagCompound(new NBTTagCompound());
                         playerIn.addChatMessage(new TextComponentString("relays linked"));
                         return EnumActionResult.SUCCESS;
+                    } else {
+                        playerIn.addChatMessage(new TextComponentString("Can't find initial relay"));
+                        stack.setTagCompound(new NBTTagCompound());
+                        return EnumActionResult.FAIL;
                     }
+                } else {
+                    playerIn.addChatMessage(new TextComponentString("Failed to link relays"));
+                    stack.setTagCompound(new NBTTagCompound());
+                    return EnumActionResult.FAIL;
                 }
             } else {
                 TileEntity tileEntity = worldIn.getTileEntity(pos);
