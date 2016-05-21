@@ -15,8 +15,13 @@ public class EntityEnergyBall extends Entity {
     public float velocityY;
     public float velocityZ;
 
-    public EntityEnergyBall(World worldIn) {
+    public EntityEnergyBall(World worldIn){
         super(worldIn);
+    }
+
+    public EntityEnergyBall(World worldIn, double x, double y, double z) {
+        super(worldIn);
+        setPosition(x, y, z);
     }
 
     public void setHeading(BlockPos heading) {
@@ -77,7 +82,7 @@ public class EntityEnergyBall extends Entity {
         motionX = velocityX;
         motionY = velocityY;
         motionZ = velocityZ;
-        if (!(worldObj.getTileEntity(origin) instanceof TileEntityRelay) || !(worldObj.getTileEntity(heading) instanceof TileEntityRelay))
+        if (origin == null || heading == null || !(worldObj.getTileEntity(origin) instanceof TileEntityRelay) || !(worldObj.getTileEntity(heading) instanceof TileEntityRelay))
             destroy();
         else if (worldObj.getBlockState(heading).getBoundingBox(worldObj, heading).intersectsWith(this.getEntityBoundingBox())){
             TileEntityRelay tile = (TileEntityRelay)worldObj.getTileEntity(heading);
